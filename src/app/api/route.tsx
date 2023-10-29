@@ -1,34 +1,36 @@
-import { NextResponse } from "next/server";
+import {NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+
+interface Message {
+  role: string;
+  content: string;
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function POST(req:Request, res:NextResponse) {
+export async function POST(req:NextRequest, res:NextResponse) {
   const body = await req.json();
   
-  // Construct the messages array
-  /**
-   * @dev thge reason i did this is that , 
-   * The OpenAI API expects each message to be a separate object with a "role" and "content."
-   */
-  const messages = body.messages.map((message) => ({
-    role: message.role,
-    content: message.content,
-  }));
+  const messages: Message[] = body.messages;
 
-  // request data
+  // Convert the `messages` array to the required format
+  const chatMessages = messages.map((message: Message) => {
+    return {
+      role: message.role as "system" | "user" | "assistant" | "function",
+      content: message.content,
+    };
+  });
+
   const requestData = {
-    messages: messages,
+    messages: chatMessages, // Use the converted array
+    model: "gpt-3.5-turbo",
+    max_tokens: 100,
   };
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      ...requestData, // Spread the requestData
-      max_tokens: 100,
-    });
+    const completion = await openai.chat.completions.create(requestData);
 
     console.log(completion.choices[0].message);
     const theResponse = completion.choices[0].message;
