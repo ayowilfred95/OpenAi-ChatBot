@@ -3,7 +3,7 @@ import { AppProps } from 'next/app';
 import Navbar from './components/Navbar';
 import './globals.css';
 
-function MyApp({ Component, pageProps}: AppProps) {
+export default function Home() {
   return (
     <div>
       <Navbar />
@@ -11,4 +11,3 @@ function MyApp({ Component, pageProps}: AppProps) {
   );
 }
 
-export default MyApp;
