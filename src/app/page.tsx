@@ -1,12 +1,9 @@
+import { NextPage, NextPageContext } from 'next';
+import { AppProps } from 'next/app';
 
-import Navbar from './components/Navbar';
-import './globals.css';
+const Page: NextPage<AppProps> = ({ Component, pageProps }) => {
+  // Your component logic here
+  return <Component {...pageProps} />;
+};
 
-export default function Home() {
-  return (
-    <div>
-      <Navbar />
-    </div>
-  );
-}
-
+export default Page;
