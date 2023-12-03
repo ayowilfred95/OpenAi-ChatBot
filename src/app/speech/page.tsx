@@ -41,7 +41,7 @@ const SpeechToText = () => {
           formData.set("file", theFile);
       
           try {
-            const response = await fetch("/api", {
+            const response = await fetch("/api/speech", {
               method: "POST",
               body: formData,
             });
